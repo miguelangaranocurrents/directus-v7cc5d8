@@ -44,3 +44,8 @@
 		fill: var(--tooltip-background-color);
 	}
 }
+
+// The popper wrapper stays mounted (force-mount) and would otherwise intercept clicks beneath an invisible tooltip
+[data-reka-popper-content-wrapper]:has(> .tooltip) {
+	pointer-events: none;
+}

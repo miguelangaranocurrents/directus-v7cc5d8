@@ -332,7 +332,12 @@ function useFileUpload() {
 			notificationsStore.remove(dragNotificationID);
 		}
 
-		const files = Array.from(event.dataTransfer.files).filter((file) => file.type);
+		// Files without a MIME type (unknown extensions) are valid uploads; only skip dropped directories
+		const items = Array.from(event.dataTransfer.items ?? []);
+
+		const files = Array.from(event.dataTransfer.files).filter((_file, index) => {
+			return items[index]?.webkitGetAsEntry?.()?.isDirectory !== true;
+		});
 
 		fileUploadNotificationID = notificationsStore.add({
 			title: t(
